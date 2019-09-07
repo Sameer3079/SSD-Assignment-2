@@ -9,8 +9,6 @@ export default class Login extends Component {
 
     render() {
 
-        main().catch(console.error)
-
         let margin = '5px'
 
         return (
