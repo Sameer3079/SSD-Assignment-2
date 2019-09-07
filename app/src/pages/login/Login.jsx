@@ -1,17 +1,38 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom';
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
+import { GoogleLogin } from 'react-google-login'
 
 export default class Login extends Component {
+
+
+    componentDidMount() {
+        const googleResponse = response => {
+            console.log('Response:', response)
+        }
+        ReactDOM.render(
+            <GoogleLogin
+                clientId="344394648938-tru8bg9jvo0ang8lu70gov71dplrcvus.apps.googleusercontent.com"
+                buttonText="Login"
+                onSuccess={googleResponse}
+                onFailure={googleResponse}
+                cookiePolicy={'single_host_origin'}
+            />,
+            document.getElementById('googleButton')
+        )
+    }
+
 
     render() {
 
         let margin = '5px'
 
         return (
+
             <div className="col-sm-12" style={{ marginTop: '50px' }}>
                 <Card className="offset-sm-4 col-sm-4">
                     <CardContent>
@@ -24,13 +45,14 @@ export default class Login extends Component {
                     </CardContent>
                     <CardActions>
                         <div className="offset-sm-1 col-sm-10">
-                            <Button variant="contained" color="primary" style={{ margin: '5px' }}>
+                            <Button variant="contained" color="primary" style={{ margin: margin }}>
                                 Login
                             </Button><br />
-                            <Button variant="contained" color="secondary">
+                            <Button variant="contained" color="secondary" style={{ margin: margin }}>
                                 Login using Google Account
                             </Button>
-                        </div>
+                            <div className="col-sm-12" id="googleButton"></div>
+                        </div><br />
                     </CardActions>
                 </Card>
             </div>
