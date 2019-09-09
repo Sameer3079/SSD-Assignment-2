@@ -9,17 +9,27 @@ import { GoogleLogin } from 'react-google-login'
 
 export default class Login extends Component {
 
+    onSuccess = response => {
+        console.log('Success, Response:', response)
+        localStorage.setItem('successResponse', JSON.stringify(response))
+    }
+
+    onFailure = response => {
+        console.log('Error, Response=', response)
+        alert('An Error Occurred')
+    }
 
     componentDidMount() {
-        const googleResponse = response => {
-            console.log('Response:', response)
+        let successResponse = localStorage.getItem('successResponse')
+        if (successResponse) {
+            console.log('Latest Success Response:', JSON.parse(successResponse))
         }
         ReactDOM.render(
             <GoogleLogin
                 clientId="344394648938-tru8bg9jvo0ang8lu70gov71dplrcvus.apps.googleusercontent.com"
                 buttonText="Login"
-                onSuccess={googleResponse}
-                onFailure={googleResponse}
+                onSuccess={this.onSuccess}
+                onFailure={this.onFailure}
                 cookiePolicy={'single_host_origin'}
             />,
             document.getElementById('googleButton')
