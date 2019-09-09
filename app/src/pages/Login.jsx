@@ -12,6 +12,7 @@ export default class Login extends Component {
     onSuccess = response => {
         console.log('Success, Response:', response)
         localStorage.setItem('successResponse', JSON.stringify(response))
+        localStorage.setItem('accessToken', response.accessToken)
     }
 
     onFailure = response => {
@@ -31,6 +32,7 @@ export default class Login extends Component {
                 onSuccess={this.onSuccess}
                 onFailure={this.onFailure}
                 cookiePolicy={'single_host_origin'}
+                scope="https://www.googleapis.com/auth/drive"
             />,
             document.getElementById('googleButton')
         )
