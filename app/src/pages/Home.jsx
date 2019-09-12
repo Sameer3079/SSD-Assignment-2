@@ -29,6 +29,8 @@ export default class Home extends Component {
             this.setState({ files: response.data.files })
         }).catch(error => {
             console.error(error)
+            history.push('/')
+            alert('Your session has expired')
         })
     }
 
@@ -38,21 +40,28 @@ export default class Home extends Component {
         history.push('/')
     }
 
+    handleUploadClick() {
+        // TODO: Upload a File After Selecting it
+        alert('TODO: Implement Uploading File')
+    }
+
     render() {
         return (
             <div>
                 <AppBar position="static">
                     <Toolbar className="col-sm-12 row">
-                        <IconButton edge="start" color="inherit" aria-label="menu" className="col-sm-1">
-                            <MenuIcon />
-                        </IconButton>
+                        <span className="col-sm-1">
+                            <Button variant="contained" color="secondary" onClick={this.handleUploadClick}>
+                                Upload
+                            </Button>
+                        </span>
                         <Typography variant="h6" className="col-sm-10">
-                            Google Drive Files
-          </Typography>
-                        <Button color="inherit" style={{ right: '5px' }} onClick={this.logout} className="col-sm-1">Logout</Button>
+                            Your Files
+                        </Typography>
+                        <Button variant="contained" color="secondary" style={{ right: '5px' }} onClick={this.logout} className="col-sm-1">Logout</Button>
                     </Toolbar>
                 </AppBar>
-                <div className="col-sm-12 row">
+                <div className="col-sm-12 row" style={{ backgroundColor: '#BCCCCE' }}>
                     {this.state.files.map((file, index) => {
                         // return <p>qwe</p>
 
