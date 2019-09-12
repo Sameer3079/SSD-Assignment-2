@@ -7,12 +7,15 @@ import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import { GoogleLogin } from 'react-google-login'
 
+import history from '../history'
+
 export default class Login extends Component {
 
     onSuccess = response => {
         console.log('Success, Response:', response)
         localStorage.setItem('successResponse', JSON.stringify(response))
         localStorage.setItem('accessToken', response.accessToken)
+        history.push('/home', '/home')
     }
 
     onFailure = response => {

@@ -30,6 +30,11 @@ export default class Home extends Component {
         })
     }
 
+    logout() {
+        console.log('logging out')
+        localStorage.clear()
+    }
+
     render() {
         return (
             <div>
@@ -41,7 +46,7 @@ export default class Home extends Component {
                         <Typography variant="h6" className="col-sm-10">
                             Google Drive Files
           </Typography>
-                        <Button color="inherit" style={{ right: '5px' }} className="col-sm-1">Logout</Button>
+                        <Button color="inherit" style={{ right: '5px' }} onClick={this.logout} className="col-sm-1">Logout</Button>
                     </Toolbar>
                 </AppBar>
                 <div className="col-sm-12 row">
