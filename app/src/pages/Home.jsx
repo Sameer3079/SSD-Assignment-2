@@ -11,6 +11,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
+import history from '../history'
+
 export default class Home extends Component {
 
     state = {
@@ -33,6 +35,7 @@ export default class Home extends Component {
     logout() {
         console.log('logging out')
         localStorage.clear()
+        history.push('/')
     }
 
     render() {

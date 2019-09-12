@@ -26,7 +26,13 @@ export default class Login extends Component {
     componentDidMount() {
         let successResponse = localStorage.getItem('successResponse')
         if (successResponse) {
-            console.log('Latest Success Response:', JSON.parse(successResponse))
+            let obj = JSON.parse(successResponse)
+            let currentTime = Date.now()
+            console.log('Current Time:', currentTime)
+            console.log('Token Expiration Time:', obj.tokenObj.expires_at)
+            if (currentTime < obj.tokenObj.expires_at) {
+                history.push('/home')
+            }
         }
         ReactDOM.render(
             <GoogleLogin
