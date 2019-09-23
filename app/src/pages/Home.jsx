@@ -47,20 +47,20 @@ export default class Home extends Component {
     }
 
     download(data, filename, type) {
-        var file = new Blob([data], {type: type});
+        var file = new Blob([data], { type: type });
         if (window.navigator.msSaveOrOpenBlob) // IE10+
             window.navigator.msSaveOrOpenBlob(file, filename);
         else { // Others
             var a = document.createElement("a"),
-                    url = URL.createObjectURL(file);
+                url = URL.createObjectURL(file);
             a.href = url;
             a.download = filename;
             document.body.appendChild(a);
             a.click();
-            setTimeout(function() {
+            setTimeout(function () {
                 document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);  
-            }, 0); 
+                window.URL.revokeObjectURL(url);
+            }, 0);
         }
     }
 
@@ -88,25 +88,28 @@ export default class Home extends Component {
         let reader = new FileReader()
         reader.onload = () => {
             let fileData = reader.result.toString()
+            const boundary = '-------314159265358979323846';
+            const delimiter = "\r\n--" + boundary + "\r\n";
+            const close_delim = "\r\n--" + boundary + "--";
             console.log('Selected File Data:', fileData)
 
-            axios.post('https://www.googleapis.com/upload/drive/v3/files', {
+            axios.post('https://www.googleapis.com/upload/drive/v3/files',
                 fileData
-            }, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                    'Content-Type': 'text/plain'
-                },
-                params: {
-                    // uploadType: 'media',
-                    // name: e.target.value.split('\\')[e.target.value.split('\\').length - 1]
-                }
-            }).then(response => {
-                console.log(response.data)
-                console.log('Success')
-            }).catch(error => {
-                console.error(error)
-            })
+                , {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                        'Content-Type': 'text/plain'
+                    },
+                    params: {
+                        uploadType: 'media',
+                        // name: e.target.value.split('\\')[e.target.value.split('\\').length - 1]
+                    },
+                }).then(response => {
+                    console.log(response.data)
+                    console.log('Success')
+                }).catch(error => {
+                    console.error(error)
+                })
 
         }
         reader.readAsText(e.target.files.item(0))
