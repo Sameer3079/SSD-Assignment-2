@@ -88,6 +88,7 @@ export default class Home extends Component {
         let fileUploadElem = document.getElementById('fileUpload')
         let filePath = fileUploadElem.value
         console.log(fileUploadElem.files)
+        let fileName = fileUploadElem.files[0].name
 
         let reader = new FileReader()
         // Defining Actions to be taken after the file has been read
@@ -115,7 +116,7 @@ export default class Home extends Component {
                      * File is already uploaded
                      * The PATCH request below updates the metadata of the file
                      */
-                    axios.patch('https://www.googleapis.com/drive/v3/files/' + response.data.id, { name: 'WARFRRAME' }, {
+                    axios.patch('https://www.googleapis.com/drive/v3/files/' + response.data.id, { name: fileName }, {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('accessToken')}`
                         }
