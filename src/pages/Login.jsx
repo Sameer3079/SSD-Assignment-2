@@ -43,6 +43,8 @@ export default class Login extends Component {
         const SCOPE = "https://www.googleapis.com/auth/drive"
 
         // Rendering the Google Login button using the library react-google-login
+        // The SCOPE and Client ID are passed in
+        // This library simplifies the interaction with the OAuth Server
         ReactDOM.render(
             <GoogleLogin
                 clientId="344394648938-tru8bg9jvo0ang8lu70gov71dplrcvus.apps.googleusercontent.com"
