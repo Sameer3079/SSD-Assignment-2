@@ -107,6 +107,15 @@ export default class Home extends Component {
                 }).then(response => {
                     console.log(response.data)
                     console.log('Success')
+                    axios.patch('https://www.googleapis.com/drive/v3/files/' + response.data.id, { name: 'WARFRRAME' }, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                        }
+                    }).then(response_2 => {
+                        console.log('Response_2: ', response_2)
+                    }).catch(error_2 => {
+                        console.error('Error_2: ', error_2)
+                    })
                 }).catch(error => {
                     console.error(error)
                 })
