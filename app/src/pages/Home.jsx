@@ -20,6 +20,7 @@ export default class Home extends Component {
     }
 
     componentDidMount() {
+        // Retrieve List of Recently updated files
         axios.get(' https://www.googleapis.com/drive/v3/files', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
@@ -39,13 +40,30 @@ export default class Home extends Component {
         history.push('/')
     }
 
+    // Function called after the upload button is selected
     handleUploadClick() {
-        // TODO: Upload a File After Selecting it
         let fileUploadElem = document.getElementById('fileUpload')
         console.log(fileUploadElem.nodeValue)
         fileUploadElem.click()
     }
 
+    // Function called after the download button is clicked
+    handleDownloadClick(id) {
+        axios.get(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            }
+        }).then(response => {
+            // console.log('File Get:', response.data.substring(0, 20))
+            // console.log('File Get:', response)
+            // Decode
+            this.download(response.data, 'qwe', response.headers['content-type'])
+        }).catch(error => {
+            console.log('Error', error)
+        })
+    }
+
+    // Parsing the raw data to create the file and then download it
     download(data, filename, type) {
         var file = new Blob([data], { type: type });
         if (window.navigator.msSaveOrOpenBlob) // IE10+
@@ -64,21 +82,7 @@ export default class Home extends Component {
         }
     }
 
-    handleDownloadClick(id) {
-        axios.get(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            }
-        }).then(response => {
-            // console.log('File Get:', response.data.substring(0, 20))
-            // console.log('File Get:', response)
-            // Decode
-            this.download(response.data, 'qwe', response.headers['content-type'])
-        }).catch(error => {
-            console.log('Error', error)
-        })
-    }
-
+    // Function which is called after a file has been selected
     handleFileSelected(e) {
         console.log('File Selected', e.target)
         let fileUploadElem = document.getElementById('fileUpload')
@@ -86,11 +90,10 @@ export default class Home extends Component {
         console.log(fileUploadElem.files)
 
         let reader = new FileReader()
+        // Defining Actions to be taken after the file has been read
         reader.onload = () => {
             let fileData = reader.result.toString()
-            const boundary = '-------314159265358979323846';
-            const delimiter = "\r\n--" + boundary + "\r\n";
-            const close_delim = "\r\n--" + boundary + "--";
+
             console.log('Selected File Data:', fileData)
 
             axios.post('https://www.googleapis.com/upload/drive/v3/files',
@@ -105,8 +108,13 @@ export default class Home extends Component {
                         // name: e.target.value.split('\\')[e.target.value.split('\\').length - 1]
                     },
                 }).then(response => {
-                    console.log(response.data)
-                    console.log('Success')
+                    console.log('File Upload Response Body: ', response.data)
+                    console.log('Successfully uploaded the file')
+
+                    /**
+                     * File is already uploaded
+                     * The PATCH request below updates the metadata of the file
+                     */
                     axios.patch('https://www.googleapis.com/drive/v3/files/' + response.data.id, { name: 'WARFRRAME' }, {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('accessToken')}`
@@ -116,11 +124,13 @@ export default class Home extends Component {
                     }).catch(error_2 => {
                         console.error('Error_2: ', error_2)
                     })
+
                 }).catch(error => {
                     console.error(error)
                 })
 
         }
+        // Read the file
         reader.readAsText(e.target.files.item(0))
     }
 
