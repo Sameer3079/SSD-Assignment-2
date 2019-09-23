@@ -20,6 +20,7 @@ export default class Home extends Component {
     }
 
     componentDidMount() {
+        // Retrieve List of Recently updated files
         axios.get(' https://www.googleapis.com/drive/v3/files', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
@@ -39,31 +40,14 @@ export default class Home extends Component {
         history.push('/')
     }
 
+    // Function called after the upload button is selected
     handleUploadClick() {
-        // TODO: Upload a File After Selecting it
         let fileUploadElem = document.getElementById('fileUpload')
         console.log(fileUploadElem.nodeValue)
         fileUploadElem.click()
     }
 
-    download(data, filename, type) {
-        var file = new Blob([data], {type: type});
-        if (window.navigator.msSaveOrOpenBlob) // IE10+
-            window.navigator.msSaveOrOpenBlob(file, filename);
-        else { // Others
-            var a = document.createElement("a"),
-                    url = URL.createObjectURL(file);
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(function() {
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);  
-            }, 0); 
-        }
-    }
-
+    // Function called after the download button is clicked
     handleDownloadClick(id) {
         axios.get(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`, {
             headers: {
@@ -79,36 +63,75 @@ export default class Home extends Component {
         })
     }
 
+    // Parsing the raw data to create the file and then download it
+    download(data, filename, type) {
+        var file = new Blob([data], { type: type });
+        if (window.navigator.msSaveOrOpenBlob) // IE10+
+            window.navigator.msSaveOrOpenBlob(file, filename);
+        else { // Others
+            var a = document.createElement("a"),
+                url = URL.createObjectURL(file);
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function () {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        }
+    }
+
+    // Function which is called after a file has been selected
     handleFileSelected(e) {
         console.log('File Selected', e.target)
         let fileUploadElem = document.getElementById('fileUpload')
         let filePath = fileUploadElem.value
         console.log(fileUploadElem.files)
+        let fileName = fileUploadElem.files[0].name
 
         let reader = new FileReader()
+        // Defining Actions to be taken after the file has been read
         reader.onload = () => {
             let fileData = reader.result.toString()
+
             console.log('Selected File Data:', fileData)
 
-            axios.post('https://www.googleapis.com/upload/drive/v3/files', {
+            axios.post('https://www.googleapis.com/upload/drive/v3/files',
                 fileData
-            }, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                    'Content-Type': 'text/plain'
-                },
-                params: {
-                    // uploadType: 'media',
-                    // name: e.target.value.split('\\')[e.target.value.split('\\').length - 1]
-                }
-            }).then(response => {
-                console.log(response.data)
-                console.log('Success')
-            }).catch(error => {
-                console.error(error)
-            })
+                , {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                        'Content-Type': 'text/plain'
+                    },
+                    params: {
+                        uploadType: 'media',
+                        // name: e.target.value.split('\\')[e.target.value.split('\\').length - 1]
+                    },
+                }).then(response => {
+                    console.log('File Upload Response Body: ', response.data)
+                    console.log('Successfully uploaded the file')
+
+                    /**
+                     * File is already uploaded
+                     * The PATCH request below updates the metadata of the file
+                     */
+                    axios.patch('https://www.googleapis.com/drive/v3/files/' + response.data.id, { name: fileName }, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                        }
+                    }).then(response_2 => {
+                        console.log('Response_2: ', response_2)
+                    }).catch(error_2 => {
+                        console.error('Error_2: ', error_2)
+                    })
+
+                }).catch(error => {
+                    console.error(error)
+                })
 
         }
+        // Read the file
         reader.readAsText(e.target.files.item(0))
     }
 

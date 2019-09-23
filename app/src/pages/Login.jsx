@@ -11,10 +11,13 @@ import history from '../history'
 
 export default class Login extends Component {
 
+    // This function is called on successful OAuth authorization
     onSuccess = response => {
         console.log('Success, Response:', response)
+        // Save details to Local Storage
         localStorage.setItem('successResponse', JSON.stringify(response))
         localStorage.setItem('accessToken', response.accessToken)
+        // Redirect to Home Page
         history.push('/home', '/home')
     }
 
@@ -35,6 +38,11 @@ export default class Login extends Component {
                 history.push('/home') // Redirect to Home Page
             }
         }
+
+        // The scope that gives access to view, edit, create and delete functionalities
+        const SCOPE = "https://www.googleapis.com/auth/drive"
+
+        // Rendering the Google Login button using the library react-google-login
         ReactDOM.render(
             <GoogleLogin
                 clientId="344394648938-tru8bg9jvo0ang8lu70gov71dplrcvus.apps.googleusercontent.com"
@@ -42,7 +50,7 @@ export default class Login extends Component {
                 onSuccess={this.onSuccess}
                 onFailure={this.onFailure}
                 cookiePolicy={'single_host_origin'}
-                scope="https://www.googleapis.com/auth/drive"
+                scope={SCOPE}
             />,
             document.getElementById('googleButton')
         )
@@ -70,9 +78,6 @@ export default class Login extends Component {
                             <Button variant="contained" color="primary" style={{ margin: margin }}>
                                 Login
                             </Button><br />
-                            {/* <Button variant="contained" color="secondary" style={{ margin: margin }}>
-                                Login using Google Account
-                            </Button> */}
                             <div className="col-sm-12" id="googleButton"></div>
                         </div><br />
                     </CardActions>
