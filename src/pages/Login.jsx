@@ -45,6 +45,7 @@ export default class Login extends Component {
         // Rendering the Google Login button using the library react-google-login
         // The SCOPE and Client ID are passed in
         // This library simplifies the interaction with the OAuth Server
+        // Default Grant Type: Implicit
         ReactDOM.render(
             <GoogleLogin
                 clientId="344394648938-tru8bg9jvo0ang8lu70gov71dplrcvus.apps.googleusercontent.com"
