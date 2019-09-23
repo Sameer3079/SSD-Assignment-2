@@ -24,6 +24,7 @@ export default class Login extends Component {
     }
 
     componentDidMount() {
+        // Checking whether the user is already logged in
         let successResponse = localStorage.getItem('successResponse')
         if (successResponse) {
             let obj = JSON.parse(successResponse)
@@ -31,7 +32,7 @@ export default class Login extends Component {
             console.log('Current Time:', currentTime)
             console.log('Token Expiration Time:', obj.tokenObj.expires_at)
             if (currentTime < obj.tokenObj.expires_at) {
-                history.push('/home')
+                history.push('/home') // Redirect to Home Page
             }
         }
         ReactDOM.render(
@@ -69,9 +70,9 @@ export default class Login extends Component {
                             <Button variant="contained" color="primary" style={{ margin: margin }}>
                                 Login
                             </Button><br />
-                            <Button variant="contained" color="secondary" style={{ margin: margin }}>
+                            {/* <Button variant="contained" color="secondary" style={{ margin: margin }}>
                                 Login using Google Account
-                            </Button>
+                            </Button> */}
                             <div className="col-sm-12" id="googleButton"></div>
                         </div><br />
                     </CardActions>

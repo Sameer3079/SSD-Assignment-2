@@ -46,6 +46,39 @@ export default class Home extends Component {
         fileUploadElem.click()
     }
 
+    download(data, filename, type) {
+        var file = new Blob([data], {type: type});
+        if (window.navigator.msSaveOrOpenBlob) // IE10+
+            window.navigator.msSaveOrOpenBlob(file, filename);
+        else { // Others
+            var a = document.createElement("a"),
+                    url = URL.createObjectURL(file);
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function() {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);  
+            }, 0); 
+        }
+    }
+
+    handleDownloadClick(id) {
+        axios.get(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            }
+        }).then(response => {
+            // console.log('File Get:', response.data.substring(0, 20))
+            // console.log('File Get:', response)
+            // Decode
+            this.download(response.data, 'qwe', response.headers['content-type'])
+        }).catch(error => {
+            console.log('Error', error)
+        })
+    }
+
     handleFileSelected(e) {
         console.log('File Selected', e.target)
         let fileUploadElem = document.getElementById('fileUpload')
@@ -93,9 +126,11 @@ export default class Home extends Component {
                             </div>
                         </span>
                         <Typography variant="h6" className="col-sm-10">
-                            Your Google Drive Files
+                            Your Google Drive Files, Account Name: {JSON.parse(localStorage.getItem('successResponse')).profileObj.name}
                         </Typography>
-                        <Button variant="contained" color="secondary" style={{ right: '5px' }} onClick={this.logout} className="col-sm-1">Logout</Button>
+                        <Button variant="contained" color="secondary" style={{ right: '5px' }} onClick={this.logout} className="col-sm-1">
+                            Logout
+                        </Button>
                     </Toolbar>
                 </AppBar>
                 <div className="col-sm-12 row" style={{ backgroundColor: '#BCCCCE' }}>
@@ -104,12 +139,12 @@ export default class Home extends Component {
 
                         let coreElem = (
                             <Card className="col-sm-2" key={index} style={{ margin: '1.6%' }}>
-                                <CardHeader title={file.name} />
+                                <CardHeader title={file.name.substring(0, 15) + (file.name.length > 15 ? '...' : '')} />
                                 {/* <CardContent>
                                     File Type: ''
                                 </CardContent> */}
                                 <CardActions>
-                                    <Button size="small">Learn More</Button>
+                                    <Button size="small" onClick={e => this.handleDownloadClick(file.id)}>Download</Button>
                                 </CardActions>
                             </Card>
                         )
