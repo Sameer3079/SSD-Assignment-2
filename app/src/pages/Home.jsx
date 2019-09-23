@@ -25,7 +25,6 @@ export default class Home extends Component {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
         }).then(response => {
-            console.log(response)
             this.setState({ files: response.data.files })
         }).catch(error => {
             console.error(error)
@@ -42,7 +41,42 @@ export default class Home extends Component {
 
     handleUploadClick() {
         // TODO: Upload a File After Selecting it
-        alert('TODO: Implement Uploading File')
+        let fileUploadElem = document.getElementById('fileUpload')
+        console.log(fileUploadElem.nodeValue)
+        fileUploadElem.click()
+    }
+
+    handleFileSelected(e) {
+        console.log('File Selected', e.target)
+        let fileUploadElem = document.getElementById('fileUpload')
+        let filePath = fileUploadElem.value
+        console.log(fileUploadElem.files)
+
+        let reader = new FileReader()
+        reader.onload = () => {
+            let fileData = reader.result.toString()
+            console.log('Selected File Data:', fileData)
+
+            axios.post('https://www.googleapis.com/upload/drive/v3/files', {
+                fileData
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                    'Content-Type': 'text/plain'
+                },
+                params: {
+                    // uploadType: 'media',
+                    // name: e.target.value.split('\\')[e.target.value.split('\\').length - 1]
+                }
+            }).then(response => {
+                console.log(response.data)
+                console.log('Success')
+            }).catch(error => {
+                console.error(error)
+            })
+
+        }
+        reader.readAsText(e.target.files.item(0))
     }
 
     render() {
@@ -54,9 +88,12 @@ export default class Home extends Component {
                             <Button variant="contained" color="secondary" onClick={this.handleUploadClick}>
                                 Upload
                             </Button>
+                            <div style={{ display: 'none' }}>
+                                <input type="file" id="fileUpload" onChange={e => { this.handleFileSelected(e) }} />
+                            </div>
                         </span>
                         <Typography variant="h6" className="col-sm-10">
-                            Your Files
+                            Your Google Drive Files
                         </Typography>
                         <Button variant="contained" color="secondary" style={{ right: '5px' }} onClick={this.logout} className="col-sm-1">Logout</Button>
                     </Toolbar>
