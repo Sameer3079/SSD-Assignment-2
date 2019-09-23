@@ -48,16 +48,13 @@ export default class Home extends Component {
     }
 
     // Function called after the download button is clicked
-    handleDownloadClick(id) {
+    handleDownloadClick(id, fileName) {
         axios.get(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             }
         }).then(response => {
-            // console.log('File Get:', response.data.substring(0, 20))
-            // console.log('File Get:', response)
-            // Decode
-            this.download(response.data, 'qwe', response.headers['content-type'])
+            this.download(response.data, fileName, response.headers['content-type'])
         }).catch(error => {
             console.log('Error', error)
         })
@@ -106,7 +103,6 @@ export default class Home extends Component {
                     },
                     params: {
                         uploadType: 'media',
-                        // name: e.target.value.split('\\')[e.target.value.split('\\').length - 1]
                     },
                 }).then(response => {
                     console.log('File Upload Response Body: ', response.data)
@@ -158,7 +154,6 @@ export default class Home extends Component {
                 </AppBar>
                 <div className="col-sm-12 row" style={{ backgroundColor: '#BCCCCE' }}>
                     {this.state.files.map((file, index) => {
-                        // return <p>qwe</p>
 
                         let coreElem = (
                             <Card className="col-sm-2" key={index} style={{ margin: '1.6%' }}>
@@ -167,7 +162,7 @@ export default class Home extends Component {
                                     File Type: ''
                                 </CardContent> */}
                                 <CardActions>
-                                    <Button size="small" onClick={e => this.handleDownloadClick(file.id)}>Download</Button>
+                                    <Button size="small" onClick={e => this.handleDownloadClick(file.id, file.name)}>Download</Button>
                                 </CardActions>
                             </Card>
                         )
