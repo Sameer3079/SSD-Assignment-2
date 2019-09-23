@@ -103,7 +103,6 @@ export default class Home extends Component {
                     },
                     params: {
                         uploadType: 'media',
-                        // name: e.target.value.split('\\')[e.target.value.split('\\').length - 1]
                     },
                 }).then(response => {
                     console.log('File Upload Response Body: ', response.data)
