@@ -45,7 +45,11 @@ export default class Login extends Component {
         let clientId = '344394648938-tru8bg9jvo0ang8lu70gov71dplrcvus.apps.googleusercontent.com'
         let callbackUri = 'http://localhost:3000/callback'
         let responseType = 'token' // Access Token = Implicit Grant Type
-        let scope = 'https://www.googleapis.com/auth/drive' // The scope that gives access to view, edit, create and delete functionalities
+
+        // The scope that gives access to view, edit, create and delete functionalities
+        // Additionally profile scope to get basic user details
+        let scope = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/userinfo.profile'
+
         let state = Math.random().toString(36).substring(7) // Generating random string
 
         // Saving state in session storage so that it can be verified against later
