@@ -164,7 +164,9 @@ export default class Home extends Component {
                             </div>
                         </span>
                         <Typography variant="h6" className="col-sm-10">
-                            Your Google Drive Files, Account Name: {sessionStorage.getItem('name')}
+                            Your Google Drive Files
+                            <span style={{ marginLeft: '200px' }}>Account: {sessionStorage.getItem('name')}</span>
+                            <img src={sessionStorage.getItem('picture')} width="50" height="50" style={{ marginLeft: '10px' }} alt="" />
                         </Typography>
                         <Button variant="contained" color="secondary" style={{ right: '5px' }} onClick={this.logout} className="col-sm-1">
                             Logout
@@ -177,9 +179,6 @@ export default class Home extends Component {
                         let coreElem = (
                             <Card className="col-sm-2" key={index} style={{ margin: '1.6%' }}>
                                 <CardHeader title={file.name.substring(0, 15) + (file.name.length > 15 ? '...' : '')} />
-                                {/* <CardContent>
-                                    File Type: ''
-                                </CardContent> */}
                                 <CardActions>
                                     <Button size="small" onClick={e => this.handleDownloadClick(file.id, file.name)}>Download</Button>
                                 </CardActions>

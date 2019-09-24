@@ -85,18 +85,14 @@ export default class Login extends Component {
         let margin = '5px'
 
         return (
-
             <div className="col-sm-12" style={{ marginTop: '50px' }}>
                 <Card className="offset-sm-4 col-sm-4">
                     <CardContent>
                         <h1>Google OAuth Web Application</h1>
-                        <img src={process.env.PUBLIC_URL + "/Google-Drive-icon.png"} />
+                        <img src={process.env.PUBLIC_URL + "/Google-Drive-icon.png"} alt="Failed to Load" />
                     </CardContent>
                     <CardActions>
                         <div className="offset-sm-1 col-sm-10">
-                            {/* <Button variant="contained" color="primary" style={{ margin: margin }}>
-                                Login
-                            </Button><br /> */}
                             <Button variant="contained" color="primary" style={{ margin: margin }} onClick={this.handleLoginUsingGoogleBtnClick}>
                                 Authorize with Google Account
                             </Button><br />
