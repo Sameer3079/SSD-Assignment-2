@@ -14,9 +14,16 @@ function App() {
     <div className="App">
       <Router history={history}>
         <Switch>
-          <Route component={Home} path="/home"></Route>
-          <Route component={CallbackPage} path="/callback"></Route>
+
+          {/* Login Page (Landing Page) */}
           <Route component={Login} exact path="/"></Route>
+
+          {/* Callback Route, receives the Access Token */}
+          <Route component={CallbackPage} path="/callback"></Route>
+
+          {/* Home Page - Where all functionality exists */}
+          <Route component={Home} path="/home"></Route>
+
         </Switch>
       </Router>
     </div>
