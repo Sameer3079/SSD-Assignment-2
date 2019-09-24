@@ -23,7 +23,7 @@ export default class Home extends Component {
         // Retrieve List of Recently updated files
         axios.get(' https://www.googleapis.com/drive/v3/files', {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
             }
         }).then(response => {
             this.setState({ files: response.data.files })
@@ -36,7 +36,7 @@ export default class Home extends Component {
 
     logout() {
         console.log('logging out')
-        localStorage.clear()
+        sessionStorage.clear()
         history.push('/')
     }
 
@@ -51,7 +51,7 @@ export default class Home extends Component {
     handleDownloadClick(id, fileName) {
         axios.get(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
             }
         }).then(response => {
             this.download(response.data, fileName, response.headers['content-type'])
@@ -98,7 +98,7 @@ export default class Home extends Component {
                 fileData
                 , {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                         'Content-Type': 'text/plain'
                     },
                     params: {
@@ -114,7 +114,7 @@ export default class Home extends Component {
                      */
                     axios.patch('https://www.googleapis.com/drive/v3/files/' + response.data.id, { name: fileName }, {
                         headers: {
-                            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
                         }
                     }).then(response_2 => {
                         console.log('Response_2: ', response_2)
@@ -145,7 +145,7 @@ export default class Home extends Component {
                             </div>
                         </span>
                         <Typography variant="h6" className="col-sm-10">
-                            Your Google Drive Files, Account Name: {JSON.parse(localStorage.getItem('successResponse')).profileObj.name}
+                            Your Google Drive Files, Account Name: {/*JSON.parse(sessionStorage.getItem('successResponse')).profileObj.name*/}
                         </Typography>
                         <Button variant="contained" color="secondary" style={{ right: '5px' }} onClick={this.logout} className="col-sm-1">
                             Logout
