@@ -1,6 +1,6 @@
 ## Running the Web Application
 
-Blog Post Link: https://sameertechblog.wordpress.com/2019/09/14/using-oauth-2-0-by-google-to-authourize-google-apis/
+Blog Post Link: https://sameertechblog.wordpress.com/2019/09/24/using-oauth-2-0-by-google-to-authourize-google-apis-2/
 
 Run the command `npm install` to install the dependencies
 
