@@ -5,6 +5,7 @@ import { Route, Switch, Router } from "react-router-dom";
 
 import Login from './pages/Login'
 import Home from './pages/Home'
+import CallbackPage from './pages/CallbackPage'
 
 import history from './history'
 
@@ -13,8 +14,16 @@ function App() {
     <div className="App">
       <Router history={history}>
         <Switch>
-          <Route component={Home} path="/home"></Route>
+
+          {/* Login Page (Landing Page) */}
           <Route component={Login} exact path="/"></Route>
+
+          {/* Callback Route, receives the Access Token */}
+          <Route component={CallbackPage} path="/callback"></Route>
+
+          {/* Home Page - Where all functionality exists */}
+          <Route component={Home} path="/home"></Route>
+
         </Switch>
       </Router>
     </div>

@@ -2,14 +2,11 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 
 import history from '../history'
 
@@ -23,7 +20,7 @@ export default class Home extends Component {
         // Retrieve List of Recently updated files
         axios.get(' https://www.googleapis.com/drive/v3/files', {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
             }
         }).then(response => {
             this.setState({ files: response.data.files })
@@ -32,11 +29,29 @@ export default class Home extends Component {
             history.push('/')
             alert('Your session has expired')
         })
+        // Retrieve User Profile Information
+        axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+            }
+        }).then(response => {
+
+            let email = response.data.email
+            let name = response.data.name
+            let picture = response.data.picture
+
+            sessionStorage.setItem('email', email)
+            sessionStorage.setItem('name', name)
+            sessionStorage.setItem('picture', picture)
+
+        }).catch(error => {
+            console.error(error)
+        })
     }
 
     logout() {
         console.log('logging out')
-        localStorage.clear()
+        sessionStorage.clear()
         history.push('/')
     }
 
@@ -51,7 +66,7 @@ export default class Home extends Component {
     handleDownloadClick(id, fileName) {
         axios.get(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
             }
         }).then(response => {
             this.download(response.data, fileName, response.headers['content-type'])
@@ -83,7 +98,6 @@ export default class Home extends Component {
     handleFileSelected(e) {
         console.log('File Selected', e.target)
         let fileUploadElem = document.getElementById('fileUpload')
-        let filePath = fileUploadElem.value
         console.log(fileUploadElem.files)
         let fileName = fileUploadElem.files[0].name
 
@@ -98,7 +112,7 @@ export default class Home extends Component {
                 fileData
                 , {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                         'Content-Type': 'text/plain'
                     },
                     params: {
@@ -114,7 +128,7 @@ export default class Home extends Component {
                      */
                     axios.patch('https://www.googleapis.com/drive/v3/files/' + response.data.id, { name: fileName }, {
                         headers: {
-                            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
                         }
                     }).then(response_2 => {
                         console.log('Response_2: ', response_2)
@@ -145,7 +159,7 @@ export default class Home extends Component {
                             </div>
                         </span>
                         <Typography variant="h6" className="col-sm-10">
-                            Your Google Drive Files, Account Name: {JSON.parse(localStorage.getItem('successResponse')).profileObj.name}
+                            Your Google Drive Files, Account Name: {sessionStorage.getItem('name')}
                         </Typography>
                         <Button variant="contained" color="secondary" style={{ right: '5px' }} onClick={this.logout} className="col-sm-1">
                             Logout
