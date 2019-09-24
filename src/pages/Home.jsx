@@ -16,7 +16,7 @@ export default class Home extends Component {
         files: []
     }
 
-    componentDidMount() {
+    retrieveFiles() {
         // Retrieve List of Recently updated files
         axios.get(' https://www.googleapis.com/drive/v3/files', {
             headers: {
@@ -29,6 +29,10 @@ export default class Home extends Component {
             history.push('/')
             alert('Your session has expired')
         })
+    }
+
+    componentDidMount() {
+        this.retrieveFiles()
         // Retrieve User Profile Information
         axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
             headers: {
@@ -131,7 +135,8 @@ export default class Home extends Component {
                             Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
                         }
                     }).then(response_2 => {
-                        console.log('Response_2: ', response_2)
+                        this.retrieveFiles()
+                        alert('File Uploaded Successfully')
                     }).catch(error_2 => {
                         console.error('Error_2: ', error_2)
                     })
