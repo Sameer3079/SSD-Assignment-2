@@ -32,6 +32,24 @@ export default class Home extends Component {
             history.push('/')
             alert('Your session has expired')
         })
+        // Retrieve User Profile Information
+        axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+            }
+        }).then(response => {
+
+            let email = response.data.email
+            let name = response.data.name
+            let picture = response.data.picture
+
+            sessionStorage.setItem('email', email)
+            sessionStorage.setItem('name', name)
+            sessionStorage.setItem('picture', picture)
+
+        }).catch(error => {
+            console.error(error)
+        })
     }
 
     logout() {
@@ -145,7 +163,7 @@ export default class Home extends Component {
                             </div>
                         </span>
                         <Typography variant="h6" className="col-sm-10">
-                            Your Google Drive Files, Account Name: {/*JSON.parse(sessionStorage.getItem('successResponse')).profileObj.name*/}
+                            Your Google Drive Files, Account Name: {sessionStorage.getItem('name')}
                         </Typography>
                         <Button variant="contained" color="secondary" style={{ right: '5px' }} onClick={this.logout} className="col-sm-1">
                             Logout

@@ -30,7 +30,6 @@ export default class CallbackPage extends Component {
 
             // Saving Access Token in Local Storage
             let accessToken = parameters.get('access_token')
-            console.log('Access Token', accessToken)
             sessionStorage.setItem('accessToken', accessToken)
 
             history.push('/home')
