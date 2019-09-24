@@ -8,21 +8,6 @@ import history from '../history'
 
 export default class Login extends Component {
 
-    // This function is called on successful OAuth authorization
-    onSuccess = response => {
-        console.log('Success, Response:', response)
-        // Save details to Local Storage
-        localStorage.setItem('successResponse', JSON.stringify(response))
-        localStorage.setItem('accessToken', response.accessToken)
-        // Redirect to Home Page
-        history.push('/home', '/home')
-    }
-
-    onFailure = response => {
-        console.log('Error, Response=', response)
-        alert('An Error Occurred')
-    }
-
     componentDidMount() {
         // Checking whether the user is already logged in
         let successResponse = localStorage.getItem('successResponse')
@@ -100,12 +85,6 @@ export default class Login extends Component {
             <div className="col-sm-12" style={{ marginTop: '50px' }}>
                 <Card className="offset-sm-4 col-sm-4">
                     <CardContent>
-                        {/* <div className="col-sm-12" style={{ margin: margin }}>
-                            <TextField label="Username" className="col-sm-5"></TextField>
-                        </div>
-                        <div className="col-sm-12" style={{ margin: margin }}>
-                            <TextField label="Password" className="col-sm-5" type="password"></TextField>
-                        </div> */}
                         <h1>Google OAuth Web Application</h1>
                         <img src={process.env.PUBLIC_URL + "/Google-Drive-icon.png"} />
                     </CardContent>
