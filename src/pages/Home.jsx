@@ -2,14 +2,11 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 
 import history from '../history'
 
@@ -101,7 +98,6 @@ export default class Home extends Component {
     handleFileSelected(e) {
         console.log('File Selected', e.target)
         let fileUploadElem = document.getElementById('fileUpload')
-        let filePath = fileUploadElem.value
         console.log(fileUploadElem.files)
         let fileName = fileUploadElem.files[0].name
 
